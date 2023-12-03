@@ -1,0 +1,121 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-doctor-table
+      author: Igor
+      changes:
+        - createTable:
+            tableName: DOCTOR
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: FIRST_NAME
+                  type: VARCHAR(255)
+              - column:
+                  name: LAST_NAME
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: create-patient-table
+      author: Igor
+      changes:
+        - createTable:
+            tableName: PATIENT
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: FIRST_NAME
+                  type: VARCHAR(255)
+              - column:
+                  name: LAST_NAME
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: create-user-table
+      author: Igor
+      changes:
+        - createTable:
+            tableName: USERS
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: USERNAME
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: PASSWORD
+                  type: VARCHAR(30)
+        - addColumn:
+            tableName: DOCTOR
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_doctor_user
+                    references: USERS(id)
+                    unique: true
+        - addColumn:
+            tableName: PATIENT
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_patient_user
+                    references: USERS(id)
+                    unique: true
+
+  - changeSet:
+      id: create-visit-table
+      author: Igor
+      changes:
+        - createTable:
+            tableName: VISIT
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: doctor_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_visit_doctor
+                    references: DOCTOR(id)
+              - column:
+                  name: patient_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_visit_patient
+                    references: PATIENT(id)
+              - column:
+                  name: PRICE
+                  type: DOUBLE
+              - column:
+                  name: START_TIME
+                  type: TIMESTAMP
+              - column:
+                  name: END_TIME
+                  type: TIMESTAMP
